@@ -10,7 +10,7 @@ io.on('connection', function(socket){
   console.log("one connected: "+socket.conn.remoteAddress);
   socket.on('chat message', function(msg){
   	var ip = socket.conn.remoteAddress
-    io.emit('chat message', [msg, ip.slice(7,ip.length), Date()]);
+    io.emit('chat message', [msg, ip.slice(7,ip.length), Date().slice(16,24)]);
   });
 });
 

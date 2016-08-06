@@ -9,8 +9,10 @@
       form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
       form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages tr { padding: 5px 10px; }
+      #messages tr { padding: 5px 10px; margin: 10px; }
       #messages tr:nth-child(odd) { background: #eee; }
+      #msg { width: 300px; word-wrap: break-word; word-break:break-all;}
+      td { padding: 10px; }
     </style>
   </head>
   <body>
@@ -28,7 +30,7 @@
         return false;
       });
       socket.on('chat message', function(msg){
-        $('#messages').append($('<tr>').append($('<td>').text(msg[0]))
+        $('#messages').append($('<tr>').append($('<td id="msg">').text(msg[0]))
                                        .append($('<td>').text(msg[1]))
                                        .append($('<td>').text(msg[2])));
       });
