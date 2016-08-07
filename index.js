@@ -77,7 +77,7 @@ io.on('connection', function(socket){
 		var ip = socket.conn.remoteAddress;
 		var name = msg.split(':')[0];
 		var time = Date()
-		io.emit('chat message', [msg, ip.slice(7,ip.length), time.slice(16,24)]);
+		io.emit('chat message', [msg, ip, time.slice(16,24)]);
 		MongoClient.connect(mongoUrl, function(err, db){
 			var coll = db.collection("messages");
 			coll.insertOne({name: name, message: msg.slice(name.length+2, msg.length), time: time})

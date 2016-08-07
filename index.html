@@ -8,7 +8,7 @@
 			form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
 			form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
 			form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-			#messages { list-style-type: none; margin: 0; padding: 0; }
+			#messages { list-style-type: none; margin-bottom: 35px; padding: 0; }
 			#messages tr { padding: 5px 10px; margin: 10px; }
 			#messages tr:nth-child(odd) { background: #eee; }
 			#msg { width: 300px; word-wrap: break-word; word-break:break-all;}
@@ -16,7 +16,7 @@
 		</style>
 	</head>
 	<body>
-    <a href="/logout"><button>logout</button></a>
+		<a href="/logout"><button>logout</button></a>
 		<table id="messages"></table>
 		<form action="">
 			<input id="m" autocomplete="off" /><button>Send</button>
@@ -27,10 +27,10 @@
 			var socket = io();
 			var cookie = document.cookie;
 			function getCookie(name) {
-        var value = "; " + document.cookie;
-        var parts = value.split("; " + name + "=");
-        if (parts.length == 2) return parts.pop().split(";").shift();
-      }
+				var value = "; " + document.cookie;
+				var parts = value.split("; " + name + "=");
+				if (parts.length == 2) return parts.pop().split(";").shift();
+			}
 
 			$('form').submit(function(){
 				socket.emit('chat message', getCookie('name') + ': ' + $('#m').val());
@@ -41,6 +41,7 @@
 				$('#messages').append($('<tr>').append($('<td id="msg">').text(msg[0]))
 																			 .append($('<td>').text(msg[1]))
 																			 .append($('<td>').text(msg[2])));
+				window.scrollBy(0,1000);
 			});
 		</script>
 	</body>
