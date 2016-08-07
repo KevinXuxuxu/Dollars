@@ -15,7 +15,6 @@ app.use(session({
 	secret: "cat concerto",
 	resave: false,
 	saveUninitialized: false,
-	//cookie: { secure: true }
 }))
 
 var cookieParser = require('cookie-parser');
@@ -31,8 +30,6 @@ app.get('/', function(req, res){
 });
 
 app.get('/logout', function(req, res){
-	// destroy the user's session to log them out
-	// will be re-created next request
 	req.session.destroy(function(){
 		res.redirect('/');
 	});
@@ -77,8 +74,14 @@ app.post('/login', function(req, res){
 io.on('connection', function(socket){
 	console.log("one connected: "+socket.conn.remoteAddress);
 	socket.on('chat message', function(msg){
-		var ip = socket.conn.remoteAddress
-		io.emit('chat message', [msg, ip.slice(7,ip.length), Date().slice(16,24)]);
+		var ip = socket.conn.remoteAddress;
+		var name = msg.split(':')[0];
+		var time = Date()
+		io.emit('chat message', [msg, ip.slice(7,ip.length), time.slice(16,24)]);
+		MongoClient.connect(mongoUrl, function(err, db){
+			var coll = db.collection("messages");
+			coll.insertOne({name: name, message: msg.slice(name.length+2, msg.length), time: time})
+		});
 	});
 });
 
