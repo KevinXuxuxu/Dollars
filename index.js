@@ -20,6 +20,15 @@ app.use(session({
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+var upUsers = new Set();
+function toArray(set){
+	var rtn = [];
+	set.forEach(function(ele){
+		rtn.push(ele);
+	});
+	return rtn;
+}
+
 app.get('/', function(req, res){
 	if(req.session.user == null){
 		res.redirect('/login')
@@ -58,6 +67,7 @@ app.post('/login', function(req, res){
 				else{
 					req.session.regenerate(function(){
 						req.session.user = [name, pass];
+						upUsers.add(name);
 						res.cookie('name', name);
 						res.redirect('/');
 					});
@@ -82,6 +92,13 @@ io.on('connection', function(socket){
 			var coll = db.collection("messages");
 			coll.insertOne({name: name, message: msg.slice(name.length+2, msg.length), time: time})
 		});
+	});
+	socket.on('one more', function(name){
+		io.emit('up users', toArray(upUsers));
+	});
+	socket.on('one down', function(name){
+		upUsers.delete(name);
+		io.emit('up users', toArray(upUsers));
 	});
 });
 

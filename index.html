@@ -12,19 +12,23 @@
 			#messages tr { padding: 5px 10px; margin: 10px; }
 			#messages tr:nth-child(odd) { background: #eee; }
 			#msg { width: 300px; word-wrap: break-word; word-break:break-all;}
-			td { padding: 10px; }
+      td { padding: 10px; }
+      #alive {list-style-type: none; position: fixed; right: 0; top: 20px; width: 20%;}
+      #alive li:nth-child(odd) { background: #eee; }
 		</style>
 	</head>
 	<body>
-		<a href="/logout"><button>logout</button></a>
+		<a href="/logout"><button onclick="logout()">logout</button></a>
 		<table id="messages"></table>
+    <ul id="alive">
+      <li id="usernum">0</li>
+    </ul>
 		<form action="">
 			<input id="m" autocomplete="off" /><button>Send</button>
 		</form>
 		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 		<script>
-			var socket = io();
 			var cookie = document.cookie;
 			function getCookie(name) {
 				var value = "; " + document.cookie;
@@ -32,17 +36,30 @@
 				if (parts.length == 2) return parts.pop().split(";").shift();
 			}
 
+      var socket = io();
+      socket.emit('one more', getCookie('name'));
+      socket.on('up users', function(users){
+        $('#alive').empty();
+        $('#alive').append($('<li id="usernum">').text(users.length));
+        for (i in users){
+          $('#alive').append($('<li>').text(users[i]));
+        };
+      });
+      function logout(){
+        socket.emit('one down', getCookie('name'));
+      };
+
 			$('form').submit(function(){
 				socket.emit('chat message', getCookie('name') + ': ' + $('#m').val());
 				$('#m').val('');
 				return false;
 			});
-			socket.on('chat message', function(msg){
-				$('#messages').append($('<tr>').append($('<td id="msg">').text(msg[0]))
-																			 .append($('<td>').text(msg[1]))
-																			 .append($('<td>').text(msg[2])));
-				window.scrollBy(0,1000);
-			});
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<tr>').append($('<td id="msg">').text(msg[0]))
+                                       .append($('<td>').text(msg[1]))
+                                       .append($('<td>').text(msg[2])));
+        window.scrollBy(0,1000);
+      });
 		</script>
 	</body>
 </html>
