@@ -4,9 +4,10 @@
     <title>Dollars login</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      body { font: 13px Helvetica, Arial;}
+      p {color: white; font-size: 360%}
+      form { background: #000; padding: 3px; width: 153px; margin: 0 auto; padding-top: 300px; padding-bottom: 3000px; height: 100%;}
+      form input { border: 0; padding: 10px; width: 100%; margin-right: .5%; }
       form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages tr { padding: 5px 10px; margin: 10px; }
@@ -18,8 +19,9 @@
   <body>
     <table id="messages"></table>
     <form action="" method="POST">
-      <input type="text" name="name" autocomplete="off" />
-      <input type="password" name="password" />
+      <p>Dollars</p>
+      <input type="text" name="name" placeholder="username" autocomplete="off" />
+      <input type="password" name="password" placeholder="password" />
       <input type="submit" value="Submit">
     </form>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
