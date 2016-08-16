@@ -12,14 +12,15 @@
 			#messages tr { padding: 5px 10px; margin: 10px; }
 			#messages tr:nth-child(odd) { background: #eee; }
 			#msg { width: 300px; word-wrap: break-word; word-break:break-all;}
-      td { padding: 10px; }
-      #alive {list-style-type: none; position: fixed; right: 0; top: 20px; width: 20%;}
-      #alive li:nth-child(odd) { background: #eee; }
+			td { padding: 10px; }
+			#alive {list-style-type: none; position: fixed; right: 0; top: 50px; width: 20%;}
+			#alive li:nth-child(odd) { background: #eee; }
+      		#logout { position: fixed; right: 0; top: 20px; width: 20%;}
 		</style>
 	</head>
 	<body>
 		<p> <%= msg%> <p>
-		<a href="/logout"><button onclick="logout()">logout</button></a>
+		<a id="logout" href="/logout"><button onclick="logout()">logout</button></a>
 		<table id="messages"></table>
     <ul id="alive">
       <li id="usernum">0</li>
@@ -37,18 +38,18 @@
 				if (parts.length == 2) return parts.pop().split(";").shift();
 			}
 
-      var socket = io();
-      socket.emit('one more', getCookie('name'));
-      socket.on('up users', function(users){
-        $('#alive').empty();
-        $('#alive').append($('<li id="usernum">').text(users.length));
-        for (i in users){
-          $('#alive').append($('<li>').text(users[i]));
-        };
-      });
-      function logout(){
-        socket.emit('one down', getCookie('name'));
-      };
+			var socket = io();
+			socket.emit('one more', getCookie('name'));
+			socket.on('up users', function(users){
+				$('#alive').empty();
+				$('#alive').append($('<li id="usernum">').text(users.length));
+				for (i in users){
+				  	$('#alive').append($('<li>').text(users[i]));
+				};
+			});
+			function logout(){
+				socket.emit('one down', getCookie('name'));
+			};
 
 			$('form').submit(function(){
 				socket.emit('chat message', getCookie('name') + ': ' + $('#m').val());
