@@ -20,6 +20,8 @@ app.use(session({
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+app.set('view engine', 'ejs');
+
 var upUsers = new Set();
 function toArray(set){
 	var rtn = [];
@@ -34,7 +36,8 @@ app.get('/', function(req, res){
 		res.redirect('/login')
 	}
 	else{
-		res.sendFile(__dirname + '/index.html');
+		//res.sendFile(__dirname + '/index.html');
+		res.render('index', {msg: ""});
 	}
 });
 
@@ -46,10 +49,11 @@ app.get('/logout', function(req, res){
 
 app.get('/login', function(req, res){
 	if(req.session.user != null){
-		res.send("Already loged in as " + req.session.user[0]);
+		res.render('index', {msg: "Already loged in as " + req.session.user[0]});
 	}
 	else{
-		res.sendFile(__dirname + '/login.html');
+		// res.sendFile(__dirname + '/login.html');
+		res.render('login', {error: "", msg: ""});
 	}
 });
 
@@ -62,7 +66,7 @@ app.post('/login', function(req, res){
 		coll.find({name: name}).toArray(function(err, docs){
 			if(docs.length != 0) {
 				if(docs[0]["pass"] != pass){
-					res.send("wrong password!")
+					res.render('login', { error: "Wrong password!", msg: ""});
 				}
 				else{
 					req.session.regenerate(function(){
@@ -75,7 +79,7 @@ app.post('/login', function(req, res){
 			}
 			else {
 				coll.insertOne({name: name, pass: pass})
-				res.send('registered')
+				res.render('login', { error: "", msg: 'Registered! Please login.'})
 			}
 		});
 	});
