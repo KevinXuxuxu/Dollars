@@ -1,7 +1,7 @@
 {
   "name": "Dollars chat room",
   "version": "0.0.1",
-  "description": "my first socket.io app",
+  "description": "Online chat room application",
   "dependencies": {
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",

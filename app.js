@@ -37,7 +37,7 @@ app.get('/', function(req, res){
 	}
 	else{
 		//res.sendFile(__dirname + '/index.html');
-		res.render('index', {msg: ""});
+		res.render('app', {msg: ""});
 	}
 });
 
@@ -49,7 +49,7 @@ app.get('/logout', function(req, res){
 
 app.get('/login', function(req, res){
 	if(req.session.user != null){
-		res.render('index', {msg: "Already loged in as " + req.session.user[0]});
+		res.render('app', {msg: "Already loged in as " + req.session.user[0]});
 	}
 	else{
 		// res.sendFile(__dirname + '/login.html');
@@ -91,7 +91,7 @@ io.on('connection', function(socket){
 		var ip = socket.conn.remoteAddress;
 		var name = msg.split(':')[0];
 		var time = Date()
-		io.emit('chat message', [msg, ip, time.slice(16,24)]);
+		io.emit('chat message', [msg, ip, time.slice(0,24)]);
 		MongoClient.connect(mongoUrl, function(err, db){
 			var coll = db.collection("messages");
 			coll.insertOne({name: name, message: msg.slice(name.length+2, msg.length), time: time})
